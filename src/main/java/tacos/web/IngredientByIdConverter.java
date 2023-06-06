@@ -8,10 +8,16 @@ import org.springframework.stereotype.Component;
 
 import tacos.entities.Ingredient;
 import tacos.entities.Ingredient.Type;
+import tacos.repositories.IngredientRepository;
 
 @Component
 public class IngredientByIdConverter implements Converter<String, Ingredient> {
 	private Map<String, Ingredient> ingredientMap = new HashMap<>();
+	private IngredientRepository ingredientRepo;
+	
+	public IngredientByIdConverter(IngredientRepository ingredientRepo ) {
+		this.ingredientRepo = ingredientRepo;		
+	}
 	
 	public IngredientByIdConverter() {
 		ingredientMap.put("FLTO", new Ingredient("FLTO", "Flour Tortilla", Type.WRAP));
@@ -22,12 +28,12 @@ public class IngredientByIdConverter implements Converter<String, Ingredient> {
 		ingredientMap.put("LETC", new Ingredient("LETC", "Lettuce", Type.VEGGIES));
 		ingredientMap.put("CHED", new Ingredient("CHED", "Cheddar", Type.CHEESE));
 		ingredientMap.put("JACK", new Ingredient("JACK", "Monterrey Jack", Type.CHEESE));
-		ingredientMap.put("SLSA", new Ingredient("SLSA", "Salsa", Type.SAUSE));
-		ingredientMap.put("SRCR", new Ingredient("SRCR", "Sour Cream", Type.SAUSE));
+		ingredientMap.put("SLSA", new Ingredient("SLSA", "Salsa", Type.SAUCE));
+		ingredientMap.put("SRCR", new Ingredient("SRCR", "Sour Cream", Type.SAUCE));
 	}
 	
 	@Override
 	public Ingredient convert(String id) {
-		return ingredientMap.get(id);
+		return ingredientRepo.findById(id).orElse(null);
 	}
 }
